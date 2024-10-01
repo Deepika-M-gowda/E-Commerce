@@ -37,6 +37,6 @@ platform :ios do
       trimedStringLink = ("(#{trimStr})").delete("\n")
       gitMsg    = sh("git log -1 --pretty=%B")
     end
-  end
-  end
+end
+end
 
