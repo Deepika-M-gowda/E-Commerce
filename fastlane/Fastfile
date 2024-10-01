@@ -1,26 +1,3 @@
-                                                                                                                                                                                  
-
-
-
-
-
-
-
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
@@ -33,12 +10,17 @@ platform :ios do
       increment_build_number(build_number: build_number,xcodeproj: "E Commerce.xcodeproj")
       
       update_project_team(
-          path: "E Commerce.xcodeproj",
-          teamid: "M6ENXWGY3Q"
+        path: "E Commerce.xcodeproj",
+        teamid: "M6ENXWGY3Q"
       )
-      
-      build_number = Time.new.strftime("%Y%m%d%H%M%S")
-      increment_build_number(build_number: build_number,xcodeproj: "E Commerce.xcodeproj")
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: "E Commerce/E Commerce.xcodeproj",
+        team_id: "M6ENXWGY3Q",
+        bundle_identifier: "sample.Ecommerce.com",
+        code_sign_identity: "iPhone Distribution",
+        profile_name: "sample_Ecommerce_adhoc_profile"
+      )
       build_app( 
         scheme: "E Commerce", 
         output_name: "E Commerce.ipa",
@@ -46,7 +28,7 @@ platform :ios do
             method: "ad-hoc"
           }
       )
-      app_pool = sh("curl -F 'file=@/Users/cicd/jnode/workspace/E-Commerce/E Commerce/E Commerce.ipa' -X POST -k https://apps.teamta.net/uploadbinary.php")
+      app_pool = sh("curl -F 'file=@/Users/cicd/jnode/workspace/E-commerce/E Commerce/E Commerce.ipa' -X POST -k https://apps.teamta.net/uploadbinary.php")
       inter_ =app_pool.to_s
       sh("touch curl_slack.log")
       sh("echo '#{inter_}' >> curl_slack.log")
@@ -57,23 +39,4 @@ platform :ios do
     end
   end
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
