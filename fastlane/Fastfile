@@ -14,7 +14,7 @@ platform :ios do
         teamid: "M6ENXWGY3Q"
       )
       update_code_signing_settings(
-        use_automatic_signing: false,
+        use_automatic_signing: true,
         path: "E Commerce/E Commerce.xcodeproj",
         team_id: "M6ENXWGY3Q",
         bundle_identifier: "sample.Ecommerce.com",
