@@ -22,6 +22,7 @@ platform :ios do
         profile_name: "sample_Ecommerce_adhoc_profile"
       )
       build_app( 
+        xcargs: "-allowProvisioningUpdates",
         scheme: "E Commerce", 
         output_name: "E Commerce.ipa",
         export_options: {
