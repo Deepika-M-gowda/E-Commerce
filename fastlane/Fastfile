@@ -18,7 +18,7 @@ platform :ios do
         path: "E Commerce/E Commerce.xcodeproj",
         team_id: "M6ENXWGY3Q",
         bundle_identifier: "sample.Ecommerce.com",
-        code_sign_identity: "iPhone Distribution",
+        code_sign_identity: "Apple Development",
         profile_name: "sample_Ecommerce_adhoc_profile"
       )
       build_app( 
