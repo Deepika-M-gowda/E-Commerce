@@ -3,41 +3,52 @@ default_platform(:ios)
 platform :ios do
   desc "Description of what the lane does"
   lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
+    # Begin lane actions
     begin
       xcode_select("/Applications/Xcode_15.0.app")
-      build_number = Time.new.strftime("%Y%m%d%H%M%S")
-      increment_build_number(build_number: build_number,xcodeproj: "E Commerce.xcodeproj")
       
+      # Increment build number with a timestamp
+      build_number = Time.new.strftime("%Y%m%d%H%M%S")
+      increment_build_number(
+        build_number: build_number,
+        xcodeproj: "E Commerce.xcodeproj"
+      )
+      
+      # Update team and code signing settings
       update_project_team(
         path: "E Commerce.xcodeproj",
         teamid: "M6ENXWGY3Q"
       )
+      
       update_code_signing_settings(
-        use_automatic_signing: false,
-        path: "E Commerce/E Commerce.xcodeproj",
-        team_id: "M6ENXWGY3Q",
-        bundle_identifier: "sample.Ecommerce.com",
-        code_sign_identity: "Apple Development",
-        profile_name: "sample_Ecommerce_adhoc_profile"
+        use_automatic_signing: true
       )
-      build_app( 
+
+      # Build the app and export as ad-hoc
+      build_app(
         xcargs: "-allowProvisioningUpdates",
-        scheme: "E Commerce", 
+        scheme: "E Commerce",
         output_name: "E Commerce.ipa",
         export_options: {
-            method: "ad-hoc"
-          }
+          method: "ad-hoc"
+        }
       )
+
+      # Upload IPA to server
       app_pool = sh("curl -F 'file=@/Users/cicd/jnode/workspace/E-commerce/E Commerce/E Commerce.ipa' -X POST -k https://apps.teamta.net/uploadbinary.php")
-      inter_ =app_pool.to_s
+
+      # Log and process the response
+      inter_ = app_pool.to_s
       sh("touch curl_slack.log")
       sh("echo '#{inter_}' >> curl_slack.log")
       real_link = sh("tail -1 curl_slack.log")
-      trimStr = (real_link.to_s).lstrip
-      trimedStringLink = ("(#{trimStr})").delete("\n")
-      gitMsg    = sh("git log -1 --pretty=%B")
-    end
-end
-end
+      
+      # Clean up the link string
+      trimStr = real_link.to_s.lstrip
+      trimedStringLink = "(#{trimStr.delete("\n")})"
 
+      # Get the latest git commit message
+      gitMsg = sh("git log -1 --pretty=%B")
+    end
+  end
+end
